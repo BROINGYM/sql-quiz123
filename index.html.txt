@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>SQL Lernumfrage</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background: #f9f9f9;
+    }
+    h1 { color: #2c3e50; }
+    .frage {
+      background: #fff;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .frage h3 { margin-top: 0; }
+    .frage textarea {
+      width: 100%;
+      min-height: 60px;
+      margin-top: 0.5rem;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .ergebnis {
+      font-weight: bold;
+      margin-top: 2rem;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>SQL Lernumfrage / Quiz</h1>
+
+  <form id="quizForm">
+
+    <div class="frage">
+      <h3>1. Was bewirkt die WHERE-Klausel?</h3>
+      <label><input type="radio" name="q1" value="b"> Sie filtert Zeilen nach einer Bedingung</label><br>
+      <label><input type="radio" name="q1" value="a"> Sie sortiert Daten</label><br>
+      <label><input type="radio" name="q1" value="c"> Sie gruppiert Datensätze</label>
+    </div>
+
+    <div class="frage">
+      <h3>2. SQL-Befehl: Produkte mit Preis > 100</h3>
+      <textarea name="q2" placeholder="SQL hier eingeben..."></textarea>
+    </div>
+
+    <div class="frage">
+      <h3>3. Unterschied zwischen ORDER BY und GROUP BY?</h3>
+      <textarea name="q3"></textarea>
+    </div>
+
+    <div class="frage">
+      <h3>4. Was bewirkt HAVING im Gegensatz zu WHERE?</h3>
+      <label><input type="radio" name="q4" value="b"> HAVING filtert aggregierte Gruppen</label><br>
+      <label><input type="radio" name="q4" value="a"> HAVING funktioniert nur ohne GROUP BY</label>
+    </div>
+
+    <div class="frage">
+      <h3>5. Welche Zeilen liefert ein INNER JOIN?</h3>
+      <label><input type="radio" name="q5" value="b"> Nur Zeilen mit passenden Werten in beiden Tabellen</label><br>
+      <label><input type="radio" name="q5" value="a"> Alle Zeilen aus beiden Tabellen</label>
+    </div>
+
+    <div class="frage">
+      <h3>6. LEFT JOIN: Alle Kunden mit/ohne Bestellungen</h3>
+      <textarea name="q6"></textarea>
+    </div>
+
+    <div class="frage">
+      <h3>7. Unterschied zwischen LEFT JOIN und FULL OUTER JOIN?</h3>
+      <textarea name="q7"></textarea>
+    </div>
+
+    <div class="frage">
+      <h3>8. Welche Befehle braucht man für Umsatz pro Kunde?</h3>
+      <label><input type="radio" name="q8" value="a"> SELECT, JOIN, GROUP BY, SUM</label><br>
+      <label><input type="radio" name="q8" value="b"> SELECT, WHERE, ORDER BY</label>
+    </div>
+
+    <div class="frage">
+      <h3>9. Was bewirkt diese Abfrage?<br>
+      <code>SELECT produkt_id, COUNT(*) FROM bestellungen GROUP BY produkt_id HAVING COUNT(*) > 5;</code></h3>
+      <textarea name="q9"></textarea>
+    </div>
+
+    <div class="frage">
+      <h3>10. CREATE TABLE mit FOREIGN KEY auf kunden.id</h3>
+      <textarea name="q10"></textarea>
+    </div>
+
+    <div class="frage">
+      <h3>11. Was bewirkt REFERENCES?</h3>
+      <label><input type="radio" name="q11" value="b"> Verbindet zwei Tabellen logisch über einen Fremdschlüssel</label><br>
+      <label><input type="radio" name="q11" value="a"> Erstellt eine neue Datenbank</label>
+    </div>
+
+    <button type="submit">Auswertung anzeigen</button>
+  </form>
+
+  <div class="ergebnis" id="ergebnisText"></div>
+
+  <script>
+    document.getElementById('quizForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const richtigeAntworten = {
+        q1: 'b',
+        q4: 'b',
+        q5: 'b',
+        q8: 'a',
+        q11: 'b'
+      };
+      let punkte = 0;
+      Object.keys(richtigeAntworten).forEach(q => {
+        const antwort = document.querySelector(`input[name="${q}"]:checked`);
+        if (antwort && antwort.value === richtigeAntworten[q]) punkte++;
+      });
+
+      let feedback = '';
+      if (punkte <= 4) feedback = 'Du solltest noch etwas üben. Grundlagen wiederholen!';
+      else if (punkte <= 7) feedback = 'Solides Wissen – weiter so!';
+      else feedback = 'Sehr gut! Du hast SQL gut im Griff.';
+
+      document.getElementById('ergebnisText').innerText =
+        `Du hast ${punkte} von 6 Multiple-Choice-Fragen richtig beantwortet. ${feedback}`;
+    });
+  </script>
+</body>
+</html>
